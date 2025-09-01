@@ -3,12 +3,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework import status
-from .models import Patient, Doctor, Mapping
-from .serializers import UserSerializer, PatientSerializer, DoctorSerializer, MappingSerializer
+from .models import patient , doctor , mapping
+from .serializers import userserializer , doctorserializer , patientserializer , mappingserializer
 
 @api_view(["POST"])
 def register(request):
-    ser = UserSerializer(data=request.data)
+    ser = userserializer(data=request.data)
     if ser.is_valid():
         ser.save()
         return Response({"msg": "user made"})
@@ -20,7 +20,7 @@ def register(request):
 def add_patient(request):
     data = request.data
     data["user"] = request.user.id
-    ser = PatientSerializer(data=data)
+    ser = patientserializer(data=data)
     if ser.is_valid():
         ser.save()
         return Response(ser.data)
@@ -29,14 +29,14 @@ def add_patient(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def all_patients(request):
-    pts = Patient.objects.filter(user=request.user)
-    ser = PatientSerializer(pts, many=True)
+    pts = patient.objects.filter(user=request.user)
+    ser = patientserializer(pts, many=True)
     return Response(ser.data)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def add_doctor(request):
-    ser = DoctorSerializer(data=request.data)
+    ser = doctorserializer(data=request.data)
     if ser.is_valid():
         ser.save()
         return Response(ser.data)
@@ -44,15 +44,15 @@ def add_doctor(request):
 
 @api_view(["GET"])
 def all_doctors(request):
-    docs = Doctor.objects.all()
-    ser = DoctorSerializer(docs, many=True)
+    docs = doctor.objects.all()
+    ser = doctorserializer(docs, many=True)
     return Response(ser.data)
 
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def map_doc(request):
-    ser = MappingSerializer(data=request.data)
+    ser = mappingserializer(data=request.data)
     if ser.is_valid():
         ser.save()
         return Response(ser.data)
@@ -60,6 +60,6 @@ def map_doc(request):
 
 @api_view(["GET"])
 def all_mappings(request):
-    maps = Mapping.objects.all()
-    ser = MappingSerializer(maps, many=True)
+    maps = mapping.objects.all()
+    ser = mappingserializer(maps, many=True)
     return Response(ser.data)

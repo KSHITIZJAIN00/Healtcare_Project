@@ -4,7 +4,7 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "abcd1234!@#%randomstuff"
+SECRET_KEY = "abcd1234!@#123kj"
 DEBUG = True
 
 ALLOWED_HOSTS = []
